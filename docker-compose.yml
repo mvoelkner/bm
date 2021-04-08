@@ -1,0 +1,90 @@
+#override defaults for dev
+version: "3.7"
+
+networks:
+    shopware:
+
+services:
+    app_server_bm:
+        image: shopware-production:local
+        build:
+            context: .
+            args:
+                USER_ID: 1000
+                GROUP_ID: 1000
+                APP_ENV: prod
+                DEBUG: "true"
+        depends_on:
+            - mysql
+            - elasticsearch
+        networks:
+            shopware:
+                aliases:
+                    - docker.vm
+        ports:
+            - "127.0.0.1:8000:8000"
+            - "127.0.0.1:8080:8080"
+            - "127.0.0.1:8005:8005"
+            - "127.0.0.1:9998:9998" # TODO hot-proxy, check if needed
+            - "127.0.0.1:35729:35729" # TODO livereload
+        extra_hosts:
+            - "docker.vm:127.0.0.1"
+        environment:
+            - DATABASE_URL=mysql://root:root@mysql:3306/shopware
+            - APP_URL=http://localhost:8000
+            - APP_ENV=dev
+            - APP_SECRET=8583a6ff63c5894a3195331701749943 # TODO change
+            - BLUE_GREEN_DEPLOYMENT=1
+            - INSTANCE_ID=
+            - SHOPWARE_ES_ENABLED=0
+            - SHOPWARE_ES_HOSTS=elasticsearch:9200
+            - SHOPWARE_ES_INDEXING_ENABLED=0
+            - SHOPWARE_ES_INDEX_PREFIX=sw
+            - SHOPWARE_CDN_STRATEGY_DEFAULT=id
+            - MAILER_URL=smtp://mailhog:1025
+            - THEME=/sw6/custom/plugins/FoodistTheme/src/Resources/app/storefront
+        volumes:
+            - app_server_sync_bm:/sw6:nocopy
+
+    mysql:
+        image: mysql:5.7
+        networks:
+            shopware:
+        ports:
+            - "127.0.0.1:4406:3306"
+        volumes:
+            - app_mysql:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+
+    elasticsearch:
+        image: elastic/elasticsearch:7.1.1
+        networks:
+            shopware:
+        ports:
+            - "127.0.0.1:9200:9200"
+            - "127.0.0.1:9300:9300"
+        environment:
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - discovery.type=single-node
+
+    mailhog:
+        image: mailhog/mailhog
+        networks:
+            shopware:
+        ports:
+            - "127.0.0.1:8002:8025"
+
+    adminer:
+        image: adminer:latest
+        networks:
+            shopware:
+        ports:
+            - "127.0.0.1:8001:8080"
+        environment:
+            ADMINER_DEFAULT_SERVER: mysql
+
+volumes:
+    app_mysql:
+    app_server_sync_bm:
+        external: true

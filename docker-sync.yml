@@ -1,0 +1,13 @@
+version: "2"
+
+options:
+    max-attempt: 30
+    verbose: true
+
+syncs:
+    app_server_sync_bm:
+        src: './'
+        sync_excludes: ['.git', 'Name .idea', 'Name var', 'Name .docker-sync', 'Path public/theme/*', 'Path public/bundles/*', 'Path public/media/*']
+        sync_excludes_type: 'none'
+        sync_userid: 1000
+        sync_groupid: 1000
