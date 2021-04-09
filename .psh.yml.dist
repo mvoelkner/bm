@@ -1,0 +1,15 @@
+paths:
+    - dev-ops/common/actions
+
+const:
+    USERKEY: "1000:1000"
+    DOCKER_SYNC_ENABLED: true
+
+dynamic:
+    APP_ID: docker-compose ps -q app_server
+    MYSQL_ID: docker-compose ps -q app_mysql
+
+environments:
+    docker:
+        paths:
+            - "dev-ops/docker/actions"
