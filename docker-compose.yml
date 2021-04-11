@@ -5,7 +5,7 @@ networks:
     shopware:
 
 services:
-    app_server_bm:
+    app_server:
         image: shopware-production:local
         build:
             context: .
@@ -33,16 +33,16 @@ services:
             - DATABASE_URL=mysql://root:root@mysql:3306/shopware
             - APP_URL=http://localhost:8000
             - APP_ENV=dev
-            - APP_SECRET=8583a6ff63c5894a3195331701749943 # TODO change
+            - APP_SECRET=8583a6ff63c5894a3195331701749943
             - BLUE_GREEN_DEPLOYMENT=1
             - INSTANCE_ID=
-            - SHOPWARE_ES_ENABLED=0
+            - SHOPWARE_ES_ENABLED=1
             - SHOPWARE_ES_HOSTS=elasticsearch:9200
-            - SHOPWARE_ES_INDEXING_ENABLED=0
+            - SHOPWARE_ES_INDEXING_ENABLED=1
             - SHOPWARE_ES_INDEX_PREFIX=sw
             - SHOPWARE_CDN_STRATEGY_DEFAULT=id
             - MAILER_URL=smtp://mailhog:1025
-            - THEME=/sw6/custom/plugins/FoodistTheme/src/Resources/app/storefront
+            #- THEME=/sw6/custom/plugins/FoodistTheme/src/Resources/app/storefront
         volumes:
             - app_server_sync_bm:/sw6:nocopy
 
@@ -53,7 +53,7 @@ services:
         ports:
             - "127.0.0.1:4406:3306"
         volumes:
-            - app_mysql:/var/lib/mysql
+            - app_mysql_bm:/var/lib/mysql
         environment:
             - MYSQL_ROOT_PASSWORD=root
 
@@ -85,6 +85,6 @@ services:
             ADMINER_DEFAULT_SERVER: mysql
 
 volumes:
-    app_mysql:
+    app_mysql_bm:
     app_server_sync_bm:
         external: true
