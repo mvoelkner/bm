@@ -42,7 +42,7 @@ services:
             - SHOPWARE_ES_INDEX_PREFIX=sw
             - SHOPWARE_CDN_STRATEGY_DEFAULT=id
             - MAILER_URL=smtp://mailhog:1025
-            #- THEME=/sw6/custom/plugins/FoodistTheme/src/Resources/app/storefront
+            #- THEME=/sw6/custom/plugins/BraakerMuehleTheme/src/Resources/app/storefront
         volumes:
             - app_server_sync_bm:/sw6:nocopy
 
