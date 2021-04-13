@@ -1,0 +1,24 @@
+{
+  "name": "BraakerMuehleTheme",
+  "author": "Patrick & Friends",
+  "description": "Theme der Braaker Mühle",
+  "views": [
+     "@Storefront",
+     "@Plugins",
+     "@BraakerMuehleTheme"
+  ],
+  "previewMedia": "app/storefront/dist/assets/defaultThemePreview.jpg",
+  "style": [
+    "app/storefront/src/scss/overrides.scss",
+    "@Storefront",
+    "app/storefront/src/scss/base.scss"
+  ],
+  "script": [
+    "@Storefront",
+    "app/storefront/dist/storefront/js/braaker-muehle-theme.js"
+  ],
+  "asset": [
+    "@Storefront",
+    "app/storefront/src/assets"
+  ]
+}
